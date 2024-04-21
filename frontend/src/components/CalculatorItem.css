@@ -1,0 +1,30 @@
+.CalculatorItem {
+    max-width: 100%;
+    flex-wrap: wrap;
+    display: grid;
+    width: 1000px;
+}
+
+.btn {
+    
+    flex-wrap: wrap;
+    max-width: 100%;
+
+    text-align: center;
+    font-size: 15px;
+    background-color: rgb(109, 0, 233);
+    color: white;
+    padding: 30px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    cursor: pointer;
+    background-color: rgb(74, 0, 158);
+}
+
+.CalculatorItem p {
+    text-align: center;
+    font-size: 20px;
+}
+
