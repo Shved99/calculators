@@ -1,5 +1,4 @@
-.InterfaceCalc {
-
+.Calc {
     display: flex;
     flex-direction: column;
 
@@ -11,7 +10,8 @@
     flex-wrap: wrap;
 }
 
-.InterfaceCalc input {
+.Calc input {
+    
     border: none;
     padding: 10px;
     outline: none;
@@ -24,7 +24,7 @@
     color: rgb(0, 0, 0);
 }
 
-.InterfaceCalc button {
+.Calc button {
     flex-wrap: wrap;
     max-width: 100%;
     border: none;
@@ -34,24 +34,10 @@
     color: white;
     padding: 30px;
     text-decoration: none;
-    
-}
-.InterfaceCalc button:hover {
-    cursor: pointer;
-    background-color: rgb(74, 0, 158);
+
 }
 
-
-.InterfaceCalc p {
-    text-align: center;
-    font-size: 20px;
-}
-
-.result {
+.Calc p {
     padding: 10px;
     background-color: rgb(230, 230, 230);
-}
-
-.info {
-
 }

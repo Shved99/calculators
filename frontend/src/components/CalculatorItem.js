@@ -2,7 +2,7 @@ import React from "react";
 import "./CalculatorItem.css";
 import { useEffect, useState } from "react";
 
-function CalculatorItem({ id }) {
+function Item({ id }) {
   const [calc, setCalc] = useState({});
 
   useEffect(() => {
@@ -12,16 +12,17 @@ function CalculatorItem({ id }) {
       .then((res) => res.json())
       .then((result) => {
         setCalc(result.data);
+
       });
   });
 
   return (
-    <div className="CalculatorItem">
-      <p>{calc.nameCalc}</p>
-      <a href={`/interfaceCalc/${calc._id}`} className="btn">Расчитать</a>
+    <div className="Item">
+      <p>{calc.Calc}</p>
+      <a href={`/Calculator/${calc._id}`} className="btn">Расчитать</a>
 
     </div>
   );
 }
 
-export default CalculatorItem;
+export default Item;

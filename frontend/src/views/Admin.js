@@ -1,19 +1,18 @@
 import React from 'react';
-
+import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './Admin.css';
 
 function Admin() {
-  async function AddCalc() {
-    const json = document.getElementById('json').value
+  const getToken = async () => {
     const login = document.getElementById('login').value
-    const pass = document.getElementById('pass').value
+    const password = document.getElementById('pass').value
 
     const loginApi = 'http://127.0.0.1:9001/login'
     let jwt
     const loginJson = {
-      login: login,
-      password: pass
+      login,
+      password
     }
 
     await fetch(loginApi, {
@@ -32,15 +31,24 @@ function Admin() {
         }
       })
 
-    if (jwt === null) {
-      return
-    }
+    return jwt
+  }
 
-    const api = 'http://127.0.0.1:9001/calculator/add'
-    const obj = JSON.parse(json)
+  const addCalc = async () => {
+    const nameCalc = document.getElementById('name').value
+    const percent = document.getElementById('percent').value
+
+    const token = await getToken()
+
+    if (token !== null) {
+      const api = 'http://127.0.0.1:9001/calculator/add'
+    const calculator = {
+      nameCalc,
+      percent
+    }
     const data = {
-      token: jwt,
-      calculator: obj
+      token,
+      calculator
     }
 
     await fetch(api, {
@@ -54,41 +62,21 @@ function Admin() {
       .then((result) => {
         document.getElementById('message').innerText = result.message
       })
-  }
-
-  const exampleJson = {
-    "nameCalc": "Название калькулятора",
-    "numberFields": [
-      {
-        "fieldName": "Введите число 1",
-        "field": "a"
-      },
-      {
-        "fieldName": "Введите число 2",
-        "field": "b"
-      },
-      {
-        "fieldName": "Введите число 3",
-        "field": "c"
-      }
-    ],
-    "formula": "a + b + c"
+    }
   }
 
 
   return (
     <>
-
+      <Header />
       <div className='Admin'>
         <div className='content'>
-          <p>Создать калькулятор:</p>
-          <p>
-             Чтобы добавить калькулятор введите его структуру в формате JSON:
-          </p>
-          <textarea id="json" value={JSON.stringify(exampleJson, null, 2)} />
+          <p className='op'>Создать калькулятор:</p>
+          <input id="name" type="text" placeholder="Имя калькулятора" />
+          <input id="percent" type="number" placeholder="Процент кредита" />
           <input id="login" type="text" placeholder="Введите логин от админа" />
           <input id="pass" type="password" placeholder="Введите пароль от админа" />
-          <button id="create" onClick={() => AddCalc()}>Создать</button>
+          <button id="create" onClick={addCalc}>Создать</button>
           <p id='message'></p>
         </div>
       </div>

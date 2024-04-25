@@ -1,43 +1,12 @@
 [{
-  "nameCalc": "Стоимость ипотеки",
-  "numberFields": [
-    {
-      "fieldName": "Сумма ипотеки",
-      "field": "a"
-    },
-    {
-      "fieldName": "Срок ипотеки (в годах)",
-      "field": "b"
-    }
-  ],
-  "formula": "(a / 100 * (9.6 * b)) + a"
+  "nameCalc": "Ипотека",
+  "percent": 9.6
 },
 {
-  "nameCalc": "Стоимость автокредита",
-  "numberFields": [
-    {
-      "fieldName": "Сумма автокредита",
-      "field": "a"
-    },
-    {
-      "fieldName": "Срок автокредита (в годах)",
-      "field": "b"
-    }
-  ],
-  "formula": "(a / 100 * (3.5 * b)) + a"
+  "nameCalc": "Автокредит",
+  "percent": 3.5
 },
 {
-  "nameCalc": "Стоимость потребительского кредита",
-  "numberFields": [
-    {
-      "fieldName": "Сумма потребительского кредита",
-      "field": "a"
-    },
-    {
-      "fieldName": "Срок потребительского кредита (в годах)",
-      "field": "b"
-    }
-  ],
-  "formula": "(a / 100 * (14.5 * b)) + a"
-}
-]
+  "nameCalc": "Потребительского кредит",
+  "percent": 14.5
+}]

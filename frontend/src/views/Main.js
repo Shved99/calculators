@@ -24,7 +24,7 @@ function Main() {
             <div className="Main">
                 <div className="content">
                     {calc.map((item) => (
-                        <CalculatorItem id={item._id} />
+                        <CalculatorItem id={item._id} key={item._id} />
                     ))}
                 </div>
             </div>
