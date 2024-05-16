@@ -1,10 +1,14 @@
-.Admin {
+.AdminChangeCalc {
+    min-height: calc(100vh - 70px - 70px);
     min-height: calc(100vh - 70px - 70px);
     text-align: center;
+    background-color: rgb(255, 255, 255);
+    max-width: 100%;
+    flex-wrap: wrap;
+
 }
 
-
-.Admin input {
+.AdminChangeCalc input {
     margin-left: auto;
     margin-right: auto;
     display: block;
@@ -15,11 +19,9 @@
     padding: 30px;
     background-color: rgb(235, 235, 235);
     outline: none;
-
 }
 
-
-.Admin  button {
+.AdminChangeCalc button {
     flex-wrap: wrap;
     max-width: 100%;
     border: none;
@@ -30,28 +32,21 @@
     text-decoration: none;
 }
 
-.Admin button:hover {
-    cursor: pointer;
-    background-color: rgb(74, 0, 158);
-}
-
-.Admin  p {
-    flex-wrap: wrap;
-    max-width: 100%;
+.AdminChangeCalc p,
+.AdminChangeCalc .to-admin {
     text-align: center;
 
 }
 
-.op {
+@media (max-width: 768px) {
+    .AdminChangeCalc {
+        width: 300px;
+    }
 
-}
-
-.calc {
-    box-shadow: 0px 0px 10px rgb(133, 133, 133);
-    margin-bottom: 50px;
-    padding: 30px;
 }
 
 a {
-    
+
+    color: black;
+    text-decoration: none;
 }
