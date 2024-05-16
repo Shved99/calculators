@@ -8,28 +8,24 @@
     padding-right: 30px;
     padding-left: 30px;
     height: 70px;
-    
-}
 
+}
 
 .HeaderLink {
-
     flex-wrap: wrap;
     max-width: 100%;
-
+    font-size: 30px;
     font-weight: bolder;
-    font-weight: normal;
-    margin-right: 50px;
-    color: #ffffff;
+    text-decoration: none;
+    color: white;
 }
 
-.Header button {
+.HeaderLink {
     flex-wrap: wrap;
     max-width: 100%;
-    border: none;
+    font-size: 20px;
+    font-weight: bolder;
+    font-weight: normal;
 
-    background-color: rgb(233, 0, 0);
-    color: white;
-    padding: 20px;
-    text-decoration: none;
+    color: #ffffff;
 }

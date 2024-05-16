@@ -23,26 +23,12 @@ app.use(cors())
 app.use(express.json())
 
 app.post('/login', async (req, res) => {
+    console.log(req.body)
+    const { login, password } = req.body
+    let user
+
     try {
-        console.log(req.body)
-        const { login, password } = req.body
-
-        const user = await User.findOne({ login })
-
-        if (!user) {
-            console.log('Пользователь отсутствует в базе.')
-            return res.status(400).json({ message: 'Пользователь отсутствует в базе.' })
-        }
-        if (user.password !== password) {
-            console.log('Неверный логин или пароль!')
-            return res.status(400).json({ message: 'Неверный логин или пароль!' })
-        }
-
-        const jwtToken = generateAccessToken(user._id, user.login)
-
-        return res.json({
-            token: jwtToken
-        })
+        user = await User.findOne({ login })
     } catch (err) {
         res.json({
             message: 'Неизвестная ошибка.'
@@ -53,31 +39,96 @@ app.post('/login', async (req, res) => {
 
         return
     }
+
+    if (!user) {
+        console.log('Пользователь отсутствует в базе.')
+        return res.status(400).json({ message: 'Пользователь отсутствует в базе.' })
+    }
+    if (user.password !== password) {
+        console.log('Неверный логин или пароль!')
+        return res.status(400).json({ message: 'Неверный логин или пароль!' })
+    }
+    const jwtToken = generateAccessToken(user._id, user.login)
+
+    res.json({
+        token: jwtToken
+    })
 })
 
 app.post('/calculator/add', async (req, res) => {
-    try {
-        console.log(req.body)
-        const { token, calculator } = req.body
+    console.log(req.body)
+    const { token, calculator } = req.body
 
+    try {
         const user = await User.findOne({ login: jsonwebtoken.verify(token, secret).login },
-            { returnOriginal: false })
+                                    { returnOriginal: false })
 
         if (user === null) {
-            console.log('Пользователь отсутствует в базе.')
-
-            return res.json({
+            res.json({
                 message: 'Пользователь отсутствует в базе.'
             })
                 .status(400)
+
+            console.log('Пользователь отсутствует в базе.')
         }
 
         const calc = new Calculator(calculator)
         await calc.save()
+    } catch (err) {
+        if (err && err.code !== 11000) {
+            res.json({
+                message: 'Неизвестная ошибка.'
+            })
+                .status(500)
+            
+            console.log(err)
 
-        return res.json({
-            message: 'Калькулятор добавлен. Перезагрузите страницу.'
+            return
+        }
+
+        //duplicate key
+        if (err && err.code === 11000) {
+            res.json({
+                message: 'Не используйте повторно это имя!'
+            })
+                .status(400)
+
+            console.error('Не используйте повторно это имя!')
+
+            return
+        }
+    }
+
+    res.json({
+        message: 'Калькулятор добавлен!'
+    })
+})
+
+app.get('/calculator/get/one/:id', async (req, res) => {
+    const id = req.params.id
+    let calc
+
+    try {
+        calc = await Calculator.findById(id);
+    } catch (err) {
+        res.json({
+            message: 'Неизвестная ошибка.'
         })
+            .status(500)
+        
+        console.error(err)
+
+        return
+    }
+
+    res.json({data: calc})
+})
+
+app.get('/calculator/get/all', async (req, res) => {
+    let calc
+
+    try {
+        calc = await Calculator.find({}, 'nameCalc')
     } catch (err) {
         res.json({
             message: 'Неизвестная ошибка.'
@@ -88,101 +139,8 @@ app.post('/calculator/add', async (req, res) => {
 
         return
     }
-})
 
-app.post('/calculator/delete/:id', async (req, res) => {
-    try {
-        console.log(req.body)
-        const token = req.body.token
-        const id = req.params.id
-
-        const user = await User.findOne({ login: jsonwebtoken.verify(token, secret).login },
-            { returnOriginal: false })
-
-        if (user === null) {
-            console.log('Пользователь отсутствует в базе.')
-
-            return res.json({
-                message: 'Пользователь отсутствует в базе.'
-            })
-                .status(400)
-        }
-
-        await Calculator.findByIdAndDelete(id)
-
-        return res.json({
-            message: 'Калькулятор удалён. Перезагрузите страницу.'
-        })
-    } catch (err) {
-        console.error(err)
-
-        return res.json({
-            message: 'Неизвестная ошибка.'
-        })
-            .status(500)
-    }
-})
-
-app.post('/calculator/edit/:id', async (req, res) => {
-    try {
-        console.log(req.body)
-        const { token, calculator } = req.body
-        const id = req.params.id
-
-        const user = await User.findOne({ login: jsonwebtoken.verify(token, secret).login },
-            { returnOriginal: false })
-
-        if (user === null) {
-            console.log('Пользователь отсутствует в базе.')
-
-            return res.json({
-                message: 'Пользователь отсутствует в базе.'
-            })
-                .status(400)
-        }
-
-        await Calculator.findByIdAndUpdate(id, calculator)
-
-        return res.json({
-            message: 'Калькулятор изменён. Вернитесь к списку калькуляторов.'
-        })
-    } catch (err) {
-        console.error(err)
-        
-        return res.json({
-            message: 'Неизвестная ошибка.'
-        })
-            .status(500)
-    }
-})
-
-app.get('/calculator/get/one/:id', async (req, res) => {
-    try {
-        const id = req.params.id
-        const calc = await Calculator.findById(id);
-        return res.json({ data: calc })
-    } catch (err) {
-        console.error(err)
-
-        return res.json({
-            message: 'Неизвестная ошибка.'
-        })
-            .status(500)
-    }
-})
-
-app.get('/calculator/get/all', async (req, res) => {
-    try {
-        const calc = await Calculator.find({})
-        res.json({ data: calc })
-    } catch (err) {
-        console.error(err)
-
-        return res.json({
-            message: 'Неизвестная ошибка.'
-        })
-            .status(500)
-    }
+    res.json({data: calc})
 })
 
 const start = async () => {
